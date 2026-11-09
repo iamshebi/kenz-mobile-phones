@@ -152,6 +152,7 @@ export const PHOTOS = new Set([
   "samsung-45w-power-adapter-with-cable",
   "samsung-50w-power-adapter-duo",
   "samsung-galaxy-buds3-fe",
+  "samsung-galaxy-buds4",
   "samsung-galaxy-smarttag2",
   "samsung-galaxy-watch-ultra",
   "samsung-galaxy-watch8",
