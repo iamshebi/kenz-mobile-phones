@@ -157,6 +157,7 @@ export const PHOTOS = new Set([
   "samsung-galaxy-smarttag2",
   "samsung-galaxy-watch-ultra",
   "samsung-galaxy-watch8",
+  "samsung-magnet-wireless-charger-qi2",
   "samsung-usb-c-to-usb-c-cable-5a-1-m",
   "sandisk-ultra-dual-drive",
   "seeken-fast-car-charger-with-cable",
