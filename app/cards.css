@@ -17,3 +17,4 @@
   .cat-tile { min-height: 130px; padding: 16px 16px 18px; }
   .cat-tile .cat-meta h3 { font-size: 1rem; }
 }
+.phone-photo { mix-blend-mode: multiply; }

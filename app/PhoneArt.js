@@ -1,3 +1,4 @@
+import { PHONE_PHOTOS } from "./phonePhotos";
 // Original, hand-built SVG renders of each phone family in its finish colour.
 // Realistic lighting: specular highlights, bevelled edges, metallic frames,
 // multi-layer lens glass, blurred lock-screen wallpaper and soft shadows.
@@ -406,8 +407,23 @@ export function PhoneArt({ product: p, view = "back", className = "" }) {
   );
 }
 
+// Real photos live in /public/phones/<id>-<view>.webp (view: main, back, front, side).
+// Views that have a photo; null when the phone has no real photos yet (drawn render is used).
+export const photoViews = (p) => {
+  const v = PHONE_PHOTOS[p.id];
+  if (!v || !v.length) return null;
+  return ["hero", "back", "front", "side"].filter((k) => v.includes(k === "hero" ? "main" : k));
+};
+
 // Shows a real photo when the product has one for this view, otherwise the render.
 export default function PhoneView({ product, view = "back", className = "" }) {
+  const real = PHONE_PHOTOS[product.id];
+  if (real && real.length) {
+    const k = view === "hero" ? (real.includes("main") ? "main" : real[0]) : view;
+    if (real.includes(k)) {
+      return <img src={`/phones/${product.id}-${k}.webp`} alt={`${product.name}, ${product.color.en}`} className={`phone-art phone-photo ${className}`} loading="lazy" decoding="async" />;
+    }
+  }
   const key = view === "hero" ? "back" : view;
   const photo = product.photos?.[key];
   if (photo) {

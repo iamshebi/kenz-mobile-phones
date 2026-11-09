@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import PhoneView from "./PhoneArt";
+import PhoneView, { photoViews } from "./PhoneArt";
 import { products } from "./products";
 import { wa } from "./content";
 
@@ -12,9 +12,11 @@ const WaIcon = ({ size = 18 }) => (
   </svg>
 );
 
-const VIEWS = ["hero", "back", "front", "side"];
+const ALL_VIEWS = ["hero", "back", "front", "side"];
 
 function Gallery({ p, t, lang }) {
+  const VIEWS = photoViews(p) || ALL_VIEWS;
+  const multi = VIEWS.length > 1;
   const [idx, setIdx] = useState(0);
   const track = useRef(null);
   const rtl = lang === "ar";
@@ -46,6 +48,7 @@ function Gallery({ p, t, lang }) {
           </div>
         ))}
       </div>
+      {multi && <>
       <button className="g-arrow g-prev" onClick={() => goTo(idx - 1)} aria-label={t.prev}>
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 6l-6 6 6 6" /></svg>
       </button>
@@ -57,6 +60,7 @@ function Gallery({ p, t, lang }) {
           <button key={v} role="tab" aria-selected={i === idx} className={i === idx ? "on" : ""} onClick={() => goTo(i)}>{t.views[v]}</button>
         ))}
       </div>
+      </>}
     </div>
   );
 }
