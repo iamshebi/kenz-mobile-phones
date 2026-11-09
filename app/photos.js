@@ -17,6 +17,8 @@ export const PHOTOS = new Set([
   "apple-35w-dual-usb-c-port-compact-power-adapter",
   "apple-40w-dynamic-power-adapter-with-60w-max",
   "apple-60w-usb-c-charge-cable-1-m",
+  "apple-airpods-4",
+  "apple-airpods-4-with-active-noise-cancellation",
   "apple-airpods-max-2",
   "apple-airpods-pro-3",
   "apple-airtag",
