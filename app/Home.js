@@ -1,8 +1,8 @@
 import Site from "./Site";
 import { T, wa, path } from "./ui";
 import { content, site } from "./content";
-import { items, departments, phoneList, brandCount, pick, catName, full } from "./catalog";
-import { Card, Ico, Arrow, WaIcon, H, Lines, href } from "./kit";
+import { items, departments, phoneList, brandCount, pick, catName, full, categories } from "./catalog";
+import { Card, Ico, Arrow, WaIcon, H, Lines, href, waP } from "./kit";
 import { workshop, credit } from "./workshop";
 
 const d = (i) => ({ "--d": `${i}s` });
@@ -23,7 +23,7 @@ export default function Home({ lang }) {
   const t = T[lang], c = content[lang], isAr = lang === "ar";
   const hero = pick(HERO);
   const count = (dep) => items.filter((i) => dep.cats.includes(i.c)).length;
-  const services = [...c.hardware, ...c.software];
+  const services = [...c.hardware, ...c.software, { title: c.pickup.eyebrow, points: [c.pickup.title, c.pickup.text.split(".")[0]] }, { title: c.trade.eyebrow, points: [c.trade.title] }];
   return (
     <Site lang={lang} page="home" alt={isAr ? "/" : "/ar"}>
       {/* HERO */}
@@ -38,8 +38,8 @@ export default function Home({ lang }) {
           </div>
           <div className="stats rv" style={d(0.75)}>
             <div><b data-n={items.length} data-s="+">0</b><small>{t.st[0]}</small></div>
-            <div><b data-n={brandCount} data-s="+">0</b><small>{t.st[1]}</small></div>
-            <div><b data-n="1" data-s={isAr ? " يوم" : " day"}>0</b><small>{t.st[2]}</small></div>
+            <div><b data-n={categories.length}>0</b><small>{t.st[1]}</small></div>
+            <div><b data-n={brandCount}>0</b><small>{t.st[2]}</small></div>
           </div>
         </div>
         <div className="stage rv" style={d(0.3)} id="stage">
@@ -60,7 +60,7 @@ export default function Home({ lang }) {
         <div className="sh"><div><span className="eyb rv">{t.depL}</span><H as="h2" className="rv" style={d(0.08)} html={t.depH} /></div><p className="rv" style={d(0.16)}>{t.depP}</p></div>
         <div className="deps">
           {departments.map((dep, i) => { const ps = pics(dep); return (
-            <a key={dep.id} className={`dp rv${dep.id === "phones" ? " dk" : ""}`} style={d((i % 3) * 0.08)} href={path(lang, `/shop?d=${dep.id}`)}>
+            <a key={dep.id} className="dp rv" style={d((i % 3) * 0.08)} href={path(lang, `/shop?d=${dep.id}`)}>
               <span className="n">{String(i + 1).padStart(2, "0")} — {count(dep)} {t.items}</span>
               <h3>{dep[lang]}</h3>
               <p className="ct">{dep.cats.map((k) => catName(k, lang)).join(" · ")}</p>
@@ -71,20 +71,22 @@ export default function Home({ lang }) {
         </div>
       </div></section>
 
-      {/* PHONE WALL */}
-      <section className="sec" id="phones"><div className="w">
-        <div className="sh"><div><span className="eyb rv">{t.phL}</span><H as="h2" className="rv" style={d(0.08)} html={t.phH} /></div>
-          <div className="shr rv"><div className="tabs" data-tabs="phw">{["all", "iphone", "galaxy"].map((k) => <button key={k} data-f={k} className={k === "all" ? "on" : undefined}>{t.tabs[k]}</button>)}</div>
-            <div className="sbt" data-for="phw"><button data-s="-1" aria-label="Previous"><Ico k="left" sw={1.5} /></button><button data-s="1" aria-label="Next"><Ico k="right" sw={1.5} /></button></div></div></div>
-        <div className="scr rv phw" id="phw">{phoneList.map((p, i) => <Card key={p.id} p={p} i={i} lang={lang} fb={p.c} />)}</div>
-        <div className="rv" style={{ marginTop: 28 }}><a className="lk" href={path(lang, "/shop?d=phones")}>{t.phAll} <Arrow /></a></div>
-      </div></section>
-
       {/* SIGNATURE */}
       <section className="sec"><div className="w">
         <div className="sh"><div><span className="eyb rv">{t.sigL}</span><H as="h2" className="rv" style={d(0.08)} html={t.sigH} /></div>
           <div className="sbt rv" data-for="scr"><button data-s="-1" aria-label="Previous"><Ico k="left" sw={1.5} /></button><button data-s="1" aria-label="Next"><Ico k="right" sw={1.5} /></button></div></div>
         <div className="scr rv" id="scr">{pick(SIG).filter((p) => p.img).map((p, i) => <Card key={p.id} p={p} i={i} lang={lang} />)}</div>
+      </div></section>
+
+      {/* PHONE WALL */}
+      <section className="sec" id="phones"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.phL}</span><H as="h2" className="rv" style={d(0.08)} html={t.phH} /></div><a className="lk rv" href={path(lang, "/shop?d=phones")}>{t.phAll} <Arrow /></a></div>
+        <ul className="plist">{phoneList.slice(0, 12).map((p, i) => (
+          <li key={p.id} className="rv" style={d((i % 5) * 0.05)}>
+            <a className="pl" href={href(p, lang)}><span className="pb">{p.b}</span><span className="pn">{p.n}</span><span className="pd">{p.d[lang]}</span></a>
+            <a className="wa" target="_blank" rel="noopener" href={waP(p, lang)}><WaIcon />{t.enq}</a>
+          </li>
+        ))}</ul>
       </div></section>
 
       {/* PROMISE */}
@@ -103,7 +105,6 @@ export default function Home({ lang }) {
             </a>
           ))}
         </div>
-        <div className="wks rv">{t.wkStats.map((s) => <div key={s[0]}><b>{s[0]}</b><small>{s[1]}</small></div>)}</div>
         <p className="cred">{t.photos}: {workshop.map((w, i) => <span key={w.key}>{i ? ", " : ""}<a href={credit(w.ref)} target="_blank" rel="noopener">{w.by}</a></span>)} / <a href="https://unsplash.com/?utm_source=kenz_mobile_phones&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>
       </div></section>
 
@@ -116,25 +117,6 @@ export default function Home({ lang }) {
             <a target="_blank" rel="noopener" href={wa(t.waS(s.title))} aria-label={s.title}><Ico k="arrow" sw={1.5} /></a></li>
         ))}</ul>
       </div></div></div>
-
-      {/* PICKUP + TRADE-IN */}
-      <section className="sec"><div className="w"><span className="eyb rv">{t.duoL}</span>
-        <div className="duo">
-          {[[c.pickup, "pickup", true], [c.trade, "swap", false]].map(([f, ic, dk], i) => (
-            <article key={ic} className={`ft2 rv${dk ? " dk" : ""}`} style={d(i * 0.1)}>
-              <span className="fi"><Ico k={ic} sw={1.4} /></span>
-              <span className="eyb">{f.eyebrow}</span><h3>{f.title}</h3><p>{f.text}</p>
-              <a className={`btn ${dk ? "gd" : "dk"} sm`} target="_blank" rel="noopener" href={wa(f.waMsg)}><WaIcon />{f.cta}</a>
-            </article>
-          ))}
-        </div>
-      </div></section>
-
-      {/* FAQ */}
-      <section className="sec"><div className="w faq">
-        <div className="sh" style={{ display: "block" }}><span className="eyb rv">{t.faqL}</span><H as="h2" className="rv" style={d(0.08)} html={t.faqH} /></div>
-        <div>{c.faq.items.map((f, i) => <details key={f.q} className="rv" style={d((i % 4) * 0.05)}><summary>{f.q}<i /></summary><p>{f.a}</p></details>)}</div>
-      </div></section>
 
       {/* VISIT */}
       <section className="sec" id="visit"><div className="w">

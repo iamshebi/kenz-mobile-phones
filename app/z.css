@@ -547,6 +547,6 @@ html[lang=ar] .specT{letter-spacing:0}
 .wc h3,.ft2 h3,.map h3{font-family:var(--sans)}
 html[lang=ar] .wc h3,html[lang=ar] .ft2 h3,html[lang=ar] .map h3{letter-spacing:0;line-height:1.3}
 .fg a.logo{display:flex;padding:0}
-.band em{color:var(--ink)}
+.band em{color:var(--gold);background:none;padding:0}
 .svc{align-items:start}
 @media (min-width:1081px){.svc>div:first-child{position:sticky;top:120px}}
