@@ -1,8 +1,9 @@
 // All site content in English and Arabic. Business details are shared.
-const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+// Public site address (same on server and in the browser). Change NEXT_PUBLIC_SITE_URL when the domain is added.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://kenzmobilephonesrak.vercel.app";
 
 export const site = {
-  url: vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000",
+  url: SITE_URL,
   phoneDisplay: "056 666 0589",
   phoneIntl: "+971566660589",
   whatsapp: "971566660589",

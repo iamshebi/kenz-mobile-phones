@@ -1,28 +1,22 @@
 # KENZ Mobile Phones — Website (English + Arabic)
 
-Next.js 14 site for KENZ Mobile Phones, Maisooni Center, Al Dhait South, Ras Al Khaimah.
+Next.js 14 storefront for KENZ Mobile Phones, Maisooni Center, Al Dhait South, Ras Al Khaimah. Deploys to Vercel from `main`.
 
-- English: `/`  ·  Arabic (RTL): `/ar`  — switch with the EN / عربي button in the header and footer.
-- All text for both languages lives in `app/content.js`.
-- Accessories catalogue (203 items, categories, brands): `app/accessories.js` — pages `/accessories` and `/ar/accessories`.
+- English: `/` · Arabic (RTL): `/ar` — switch with the EN / ع button in the header.
+- Shop with departments, search, brand filters: `/shop` (`/ar/shop`). Old `/accessories` links redirect here.
+- Every phone and accessory has its own page: `/product/<id>` (`/ar/product/<id>`), with a WhatsApp enquiry that includes the product details and link.
+- No prices on the site. Prices are shared on WhatsApp.
 
-## Deploy to Vercel
-1. Push this folder to a GitHub repository.
-2. Vercel → **Add New → Project → Import** the repo. Framework is auto-detected (Next.js). No environment variables needed.
-3. Click **Deploy**. Add your custom domain later under Project → Settings → Domains.
+## Where things live
+- `app/products.js` — the 20 phones and their specs. Photos: `public/phones/<id>-main|back|side.webp` (listed in `app/phonePhotos.js`).
+- `app/accessories.js` — every accessory. Photo: `public/products/<brand>-<name>.webp` (800×800, white background); `app/photos.js` lists the files.
+- `app/catalog.js` — joins phones + accessories and defines the departments.
+- `app/ui.js` (layout text) and `app/content.js` (business details, services, FAQ) — English and Arabic.
+- `app/workshop.js` — workshop photos (Unsplash, credited on the page).
+- `app/z.css` — all styles.
 
 ## Run locally
 ```
 npm install
 npm run dev
 ```
-
-## Product collection
-The 20 phones in the collection live in `app/products.js` (name, colour, storage, specs in English and Arabic).
-Each phone is shown with original drawn renders (back, front and side) in its finish colour.
-
-To show real photos of your own stock instead, put images in `public/products/` and add a `photos` entry to that product, e.g.
-```js
-photos: { back: "/products/ip18pm-burgundy-back.jpg", front: "/products/ip18pm-burgundy-front.jpg", side: "/products/ip18pm-burgundy-side.jpg" },
-```
-Any view with a photo uses the photo; the others keep the render.

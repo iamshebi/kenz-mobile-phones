@@ -1,4 +1,4 @@
-import "../globals.css";
+import "../z.css";
 import { buildMetadata, schema } from "../meta";
 export { viewport } from "../meta";
 

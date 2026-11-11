@@ -52,3 +52,16 @@ export function schema(lang) {
     paymentAccepted: "Cash, Credit Card, Tabby, Tamara",
   };
 }
+
+export function shopMeta(lang) {
+  const ar = lang === "ar";
+  const title = ar ? "المتجر | كنز للهواتف المتحركة، رأس الخيمة" : "Shop | KENZ Mobile Phones, Ras Al Khaimah";
+  const description = ar
+    ? "تصفح هواتف آيفون وجالكسي وإكسسوارات أبل وسامسونج وهواوي الأصلية والسماعات والشواحن والساعات الذكية والبخور في كنز للهواتف المتحركة، الظيت الجنوبي، رأس الخيمة. الأسعار عبر واتساب."
+    : "Browse iPhone and Galaxy phones, genuine Apple, Samsung and Huawei accessories, audio, chargers, smart watches, bakhoor and more at KENZ Mobile Phones, Al Dhait South, Ras Al Khaimah. Prices on WhatsApp.";
+  return {
+    title, description,
+    alternates: { canonical: ar ? "/ar/shop" : "/shop", languages: { en: "/shop", ar: "/ar/shop" } },
+    openGraph: { title, description, images: ["/logo.jpg"], locale: ar ? "ar_AE" : "en_AE" },
+  };
+}

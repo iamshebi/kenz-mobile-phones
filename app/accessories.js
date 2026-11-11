@@ -89,7 +89,9 @@ const rows = [
   ["audio", "SAAFO", "ANC Stereo Headphone", "headphones", "Active noise cancelling", "عزل نشط للضوضاء", "dark"],
   ["audio", "SAAFO", "True Wireless Earbuds with ANC", "earbuds", "Noise cancelling; touch control", "عزل الضوضاء؛ تحكم باللمس", "light"],
   ["audio", "SAAFO", "SF0303 Super Stereo Type-C Earphone (VOCE)", "earphones", "Digital Type-C; sound insulation", "Type-C رقمية؛ عزل صوتي ممتاز", "light"],
-  ["audio", "SAAFO", "SF0325 Lightning Single Headset", "earphones", "Lightning mono headset", "سماعة أحادية Lightning", "light"],
+  ["audio", "SAAFO", "SF-0315 Lightning Single Headset", "earphones", "Lightning mono headset; in-line mic and controls", "سماعة أحادية Lightning؛ ميكروفون وأزرار تحكم", "light"],
+  ["audio", "SAAFO", "Stereo Wired Earphones (3.5 mm)", "earphones", "3.5mm plug; in-line remote and mic", "قابس 3.5 ملم؛ تحكم وميكروفون", "light"],
+  ["audio", "Mower", "Lightning Wired Earphones", "earphones", "Lightning plug; in-line remote and mic", "قابس Lightning؛ تحكم وميكروفون", "light"],
   ["audio", "Seeken", "Rhythm Pro Earphone", "earphones", "In-ear with mic", "سماعة داخل الأذن مع ميكروفون", "dark"],
   ["audio", "Seeken", "Lightning Braided Earphone", "earphones", "Braided cable; Lightning", "كابل مضفّر؛ Lightning", "dark"],
   ["audio", "MBLBERRI", "Stereo Earphones with Mic", "earphones", "Lightning; super bass", "Lightning؛ صوت جهير قوي", "light"],
@@ -172,6 +174,7 @@ const rows = [
   ["power", "oraimo", "oraimo Power Bank 10000mAh", "powerbank", "Type-C charging", "شحن Type-C", "dark"],
   ["power", "Aztech", "Aztech Power Bank", "powerbank", "Slim design", "تصميم نحيف", "dark"],
   ["power", "x.cell", "x.cell Power Bank 10000mAh", "powerbank", "High speed charging", "شحن عالي السرعة", "dark"],
+  ["power", "Green Lion", "Malaga 10000mAh MagSafe Power Bank", "magbattery", "15W wireless; PD 20W fast charging", "لاسلكي 15 واط؛ شحن سريع PD 20 واط", "dark"],
   ["power", "Green Lion", "Solar Max Power Bank", "powerbank", "Solar panel; built-in cables", "لوح شمسي؛ كابلات مدمجة", "dark"],
   ["power", "Porodo", "Reel Extension 10M", "reel", "4 universal AC sockets", "4 مقابس عالمية", "dark"],
   ["power", "Porodo", "Three-Storey 12 AC Power Hub", "powerstrip", "12 sockets + USB-C PD and QC 3.0", "12 مقبس + USB-C و QC 3.0", "dark"],
@@ -200,6 +203,7 @@ const rows = [
   ["stands", "Porodo", "Stance Neck-Mounted Phone Holder", "neckholder", "Hands-free chest tripod; 360°", "حامل رقبة؛ دوران 360 درجة", "dark"],
   ["stands", "BWOO", "Foldable Desktop Metal Phone Stand", "deskstand", "Adjustable angle", "زاوية قابلة للتعديل", "light"],
   ["stands", "Ashyai", "Folding Desktop Stand", "deskstand", "Foldable", "قابل للطي", "dark"],
+  ["chargers", "Green Lion", "Qi2.2 Mag Flex 3-in-1 Wireless Charger", "pad", "25W; foldable; phone, watch and earbuds", "25 واط؛ قابل للطي؛ للهاتف والساعة والسماعات", "dark"],
   ["stands", "Green Lion", "Magnetic Desk Stand", "deskstand", "Magnetic", "مغناطيسي", "light"],
   ["stands", "WiWU", "Smart Tablet Holder", "deskstand", "For tablets and phones", "للأجهزة اللوحية والهواتف", "dark"],
   ["stands", "WiWU", "Dual Desktop Stand", "deskstand", "Phone + tablet", "هاتف وجهاز لوحي", "dark"],
@@ -209,6 +213,9 @@ const rows = [
 
   // ---------------- WATCHES ----------------
   ["watches", "Classic", "Classic Smart Watch", "watch", "Round and square models", "موديلات دائرية ومربعة", "dark"],
+  ["watches", "Green Lion", "G-Master Smart Watch", "watch", "1.43\" AMOLED; Bluetooth 5.4; IP68", "شاشة AMOLED 1.43 بوصة؛ بلوتوث 5.4؛ IP68", "dark"],
+  ["watches", "Green Lion", "Force Smart Watch", "watch", "1.52\" IPS; Bluetooth calls; flashlight", "شاشة IPS 1.52 بوصة؛ مكالمات بلوتوث؛ كشاف", "dark"],
+  ["watches", "Green Lion", "Track Fit Smart Watch", "watch", "1.45\" display; Bluetooth calls; IP65", "شاشة 1.45 بوصة؛ مكالمات بلوتوث؛ IP65", "dark"],
   ["watches", "Green Lion", "Green Lion Smart Watch", "watch", "Multiple models", "عدة موديلات", "dark"],
   ["watches", "U&i", "Ninja Smart Watch", "watch", "Stainless steel", "ستانلس ستيل", "dark"],
   ["watches", "Ultramax", "Ultramax Smart Watch", "watch", "Big screen", "شاشة كبيرة", "dark"],
@@ -220,6 +227,7 @@ const rows = [
   ["protection", "Assorted", "iPhone 18 Pro Max Clear Case", "case", "MagSafe compatible", "متوافق مع MagSafe", "light"],
   ["protection", "Assorted", "Grip 360 MagSafe Case", "case", "Built-in grip", "مقبض مدمج", "dark"],
   ["protection", "CLASSIC", "Protective Cases", "case", "Shockproof", "مقاومة للصدمات", "dark"],
+  ["protection", "Green Lion", "Leather MagSafe Case for iPhone Duo", "case", "Premium PU leather; MagSafe compatible", "جلد PU فاخر؛ متوافق مع MagSafe", "light"],
   ["protection", "Assorted", "Samsung Galaxy Z Fold Leather Case", "case", "Foldable case", "غطاء للهواتف القابلة للطي", "dark"],
   ["protection", "Assorted", "Tablet Folio Cases", "tabletcase", "Kids, character and sport designs", "تصاميم أطفال وشخصيات ورياضة", "light"],
   ["protection", "Assorted", "Kids EVA Tablet Case", "tabletcase", "Shockproof foam", "إسفنج مقاوم للصدمات", "light"],
@@ -228,7 +236,7 @@ const rows = [
 
   // ---------------- FRAGRANCE ----------------
   ["fragrance", "Assorted", "Rotational Incense Burner", "burner", "Electric bakhoor burner; rotating", "مبخرة كهربائية دوّارة", "dark"],
-  ["fragrance", "Assorted", "Oud Bakhoor Burner", "burner", "Portable electric", "مبخرة كهربائية محمولة", "dark"],
+  ["fragrance", "Green Lion", "Pocket Bakhour Incense Burner", "burner", "Portable electric", "مبخرة كهربائية محمولة", "dark"],
   ["fragrance", "Ashyai", "Aeroscent Pro", "diffuser", "Fragrance diffuser", "موزع عطر", "dark"],
   ["fragrance", "Porodo", "Car & Home Aroma Diffuser", "diffuser", "Portable", "محمول", "dark"],
   ["fragrance", "Green Lion", "Aroma Diffuser", "diffuser", "Portable; soft light", "محمول؛ إضاءة هادئة", "light"],
@@ -242,7 +250,7 @@ const rows = [
   ["care", "Assorted", "Mini Handheld Fan", "fan", "Rechargeable", "قابلة للشحن", "light"],
 
   // ---------------- PHOTO & VIDEO ----------------
-  ["creator", "oraimo", "Smart Tracking Gimbal Tripod", "tripod", "Face tracking", "تتبع الوجه", "dark"],
+  ["creator", "oraimo", "FlowMotion Smart Tracking Gimbal", "tripod", "Face tracking; remote shutter (OAT-201A)", "تتبع الوجه؛ ريموت للتصوير (OAT-201A)", "dark"],
   ["creator", "Green Lion", "Ring Light 8\"", "ringlight", "With tripod", "مع حامل ثلاثي", "light"],
   ["creator", "Assorted", "Selfie Stick Tripod", "tripod", "Bluetooth remote", "ريموت بلوتوث", "dark"],
   ["creator", "Assorted", "Creative RGB Light", "ringlight", "RGB light", "إضاءة RGB", "dark"],

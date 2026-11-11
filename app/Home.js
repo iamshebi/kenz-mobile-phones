@@ -1,309 +1,159 @@
-import Image from "next/image";
-import Motion from "./Motion";
-import Icon from "./Icon";
-import Collection from "./Collection";
-import { Header, Footer, WaIcon } from "./Chrome";
-import AccessoryTeaser from "./AccessoryTeaser";
-import { withShop } from "./shopContent";
-import { site, wa, brands } from "./content";
+import Site from "./Site";
+import { T, wa, path } from "./ui";
+import { content, site } from "./content";
+import { items, departments, phoneList, brandCount, pick, catName, full } from "./catalog";
+import { Card, Ico, Arrow, WaIcon, H, Lines, href } from "./kit";
+import { workshop, credit } from "./workshop";
 
-const d = (i) => ({ "--d": `${i * 90}ms` });
+const d = (i) => ({ "--d": `${i}s` });
 
-const Title = ({ a, b }) => (<>{a}<span className="mark-hl">{b}</span></>);
+const HERO = ["galaxy-s26-ultra-cobalt-violet-1-tb", "iphone-18-pro-max-burgundy-2-tb", "apple-airpods-max-2", "samsung-galaxy-watch-ultra"];
+const SIG = ["apple-airpods-pro-3", "samsung-galaxy-buds4-pro", "apple-airpods-max-2", "samsung-galaxy-watch-ultra", "apple-magsafe-charger-1-m", "apple-iphone-air-magsafe-battery", "samsung-galaxy-watch8", "apple-airtag-4-pack", "green-lion-qi2-2-mag-flex-3-in-1-wireless-charger", "apple-apple-pencil-usb-c", "green-lion-malaga-10000mah-magsafe-power-bank", "samsung-galaxy-smarttag2"];
+const MQ = ["Apple", "Samsung", "Huawei", "Anker", "Green Lion", "oraimo", "JBL", "Mevor", "Porodo", "SAAFO", "Soundcore", "Belkin", "UGREEN", "Powerology"];
 
-export default function Home({ t: base }) {
-  const t = withShop(base);
-  const isAr = t.lang === "ar";
+// three photos for each department tile (first ones that have a photo)
+const PIN = { phones: ["iphone-18-pro-max-burgundy-2-tb", "galaxy-z-flip7-mint-256-gb", "iphone-air-sky-blue-256-gb"], genuine: ["apple-airpods-pro-3", "samsung-galaxy-buds4-pro", "apple-magsafe-charger-1-m"], wear: ["samsung-galaxy-watch-ultra", "samsung-galaxy-watch8", "green-lion-force-smart-watch"] };
+const pics = (dep) => {
+  const chosen = (PIN[dep.id] || []).map((id) => items.find((i) => i.id === id)).filter((p) => p && p.img);
+  const rest = items.filter((i) => dep.cats.includes(i.c) && i.img && !chosen.includes(i));
+  return [...chosen, ...rest].slice(0, 3);
+};
 
+export default function Home({ lang }) {
+  const t = T[lang], c = content[lang], isAr = lang === "ar";
+  const hero = pick(HERO);
+  const count = (dep) => items.filter((i) => dep.cats.includes(i.c)).length;
+  const services = [...c.hardware, ...c.software];
   return (
-    <>
-      <Motion />
-      <Header t={t} page="home" />
-
-      <main id="top">
-        {/* HERO */}
-        <section className="hero">
-          <div className="hero-glow" aria-hidden="true" />
-          <div className="grid-lines" aria-hidden="true" />
-          <div className="wrap hero-center">
-            <div className="mark load" style={d(0)}>
-              <div className="halo h1" /><div className="halo h2" /><div className="halo h3" />
-              <Image src="/logo-mark.png" alt={isAr ? "شعار كنز للهواتف المتحركة" : "KENZ Mobile Phones logo"} width={684} height={829} priority sizes="140px" />
-            </div>
-            <p className="eyebrow center load" style={d(1)}>{t.hero.location}</p>
-            <h1 className="load" style={d(2)}>
-              {t.hero.title1}<br /><span className="mark-hl">{t.hero.title2}</span>
-            </h1>
-            <p className="lead load" style={d(3)}>
-              {t.hero.leadA}<strong>{t.hero.leadB}</strong>{t.hero.leadC}
-            </p>
-            <div className="cta center load" style={d(4)}>
-              <a className="btn btn-dark" href={wa(t.hero.waMsg)}><WaIcon /> {t.hero.cta1}</a>
-              <a className="btn btn-line" href="#collection">{t.hero.cta2}</a>
-            </div>
-            <ul className="facts load" style={d(5)}>
-              {t.hero.facts.map((f) => <li key={f}>{f}</li>)}
-            </ul>
+    <Site lang={lang} page="home" alt={isAr ? "/" : "/ar"}>
+      {/* HERO */}
+      <section className="hero"><div className="w">
+        <div className="rv in">
+          <span className="eyb">{t.eyb}</span>
+          <h1 className="hx"><Lines arr={t.h1} /></h1>
+          <p className="lead rv" style={d(0.5)}>{t.lead}</p>
+          <div className="row rv" style={d(0.62)}>
+            <a className="btn dk" href={path(lang, "/shop")}>{t.explore} <Arrow /></a>
+            <a className="btn lt" target="_blank" rel="noopener" href={wa(t.waHi)}><WaIcon />{t.ask}</a>
           </div>
-          <a href="#premium" className="scroll-cue" aria-label={t.hero.scroll}><span /></a>
-        </section>
-
-        {/* BRAND MARQUEE */}
-        <section className="marquee" aria-label={t.brandsAria} dir="ltr">
-          <div className="track">
-            {[...brands, ...brands, ...brands].map((b, i) => <span key={i}>{b}<i /></span>)}
+          <div className="stats rv" style={d(0.75)}>
+            <div><b data-n={items.length} data-s="+">0</b><small>{t.st[0]}</small></div>
+            <div><b data-n={brandCount} data-s="+">0</b><small>{t.st[1]}</small></div>
+            <div><b data-n="1" data-s={isAr ? " يوم" : " day"}>0</b><small>{t.st[2]}</small></div>
           </div>
-        </section>
+        </div>
+        <div className="stage rv" style={d(0.3)} id="stage">
+          <div className="halo"><div className="ring" /><div className="orb" /></div>
+          {hero.map((p, i) => (
+            <a key={p.id} href={href(p, lang)} className={`fl f${i + 1}`} data-depth={[18, -26, 22, -14][i]} aria-label={full(p)}>
+              <div><img src={p.img} alt={full(p)} {...(i < 2 ? { fetchPriority: "high" } : {})} /></div>
+            </a>
+          ))}
+          <div className="tag"><i />{t.live}</div>
+        </div>
+      </div></section>
 
-        {/* PREMIUM */}
-        <section id="premium" className="sec">
-          <div className="wrap premium">
-            <div className="premium-copy" data-reveal>
-              <p className="eyebrow">{t.premium.eyebrow}</p>
-              <h2><Title a={t.premium.title1} b={t.premium.title2} /></h2>
-              <p className="sub">{t.premium.text}</p>
-              <div className="cta">
-                <a className="btn btn-dark" href="#collection">{t.premium.cta}</a>
-              </div>
-            </div>
-            <div className="premium-lines">
-              {t.premium.lines.map((l, i) => (
-                <a className="pline" key={l.name} href={wa(`${t.premium.waMsg}${l.name}`)} data-reveal style={d(i)}>
-                  <span className="pnum">0{i + 1}</span>
-                  <div><h3>{l.name}</h3><p>{l.note}</p></div>
-                  <span className="parrow" aria-hidden="true">{t.arrow}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-          <div className="wrap">
-            <div className="quality">
-              {t.premium.quality.map((q, i) => (
-                <div className="q-item" key={q.title} data-reveal style={d(i)}>
-                  <span className="q-dot"><Icon name="check" size={15} /></span>
-                  <h3>{q.title}</h3>
-                  <p>{q.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+      <div className="mq" aria-hidden="true" dir="ltr"><div className="tr">{[...MQ, ...MQ].map((b, i) => <span key={i}>{b}</span>)}</div></div>
 
-        {/* COLLECTION */}
-        <Collection t={t.collection} lang={t.lang} />
+      {/* DEPARTMENTS */}
+      <section className="sec" id="departments"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.depL}</span><H as="h2" className="rv" style={d(0.08)} html={t.depH} /></div><p className="rv" style={d(0.16)}>{t.depP}</p></div>
+        <div className="deps">
+          {departments.map((dep, i) => { const ps = pics(dep); return (
+            <a key={dep.id} className={`dp rv${dep.id === "phones" ? " dk" : ""}`} style={d((i % 3) * 0.08)} href={path(lang, `/shop?d=${dep.id}`)}>
+              <span className="n">{String(i + 1).padStart(2, "0")} — {count(dep)} {t.items}</span>
+              <h3>{dep[lang]}</h3>
+              <p className="ct">{dep.cats.map((k) => catName(k, lang)).join(" · ")}</p>
+              {ps.length >= 2 ? <div className="pics">{ps.map((p) => <img key={p.id} src={p.img} alt="" loading="lazy" />)}</div> : <div className="glyph"><Ico k={dep.icon} sw={0.8} /></div>}
+              <span className="go"><Ico k="arrow" sw={1.5} /></span>
+            </a>
+          ); })}
+        </div>
+      </div></section>
 
-        {/* ACCESSORIES TEASER */}
-        <AccessoryTeaser t={t} />
+      {/* PHONE WALL */}
+      <section className="sec" id="phones"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.phL}</span><H as="h2" className="rv" style={d(0.08)} html={t.phH} /></div>
+          <div className="shr rv"><div className="tabs" data-tabs="phw">{["all", "iphone", "galaxy"].map((k) => <button key={k} data-f={k} className={k === "all" ? "on" : undefined}>{t.tabs[k]}</button>)}</div>
+            <div className="sbt" data-for="phw"><button data-s="-1" aria-label="Previous"><Ico k="left" sw={1.5} /></button><button data-s="1" aria-label="Next"><Ico k="right" sw={1.5} /></button></div></div></div>
+        <div className="scr rv phw" id="phw">{phoneList.map((p, i) => <Card key={p.id} p={p} i={i} lang={lang} fb={p.c} />)}</div>
+        <div className="rv" style={{ marginTop: 28 }}><a className="lk" href={path(lang, "/shop?d=phones")}>{t.phAll} <Arrow /></a></div>
+      </div></section>
 
-        {/* HIGHLIGHTS */}
-        <section className="hl-sec">
-          <div className="wrap hl">
-            {t.highlights.map((h, i) => (
-              <div className="hl-item" key={h.title} data-reveal style={d(i)}>
-                <Icon name={h.icon} size={22} />
-                <div><b>{h.title}</b><span>{h.text}</span></div>
-              </div>
-            ))}
-          </div>
-        </section>
+      {/* SIGNATURE */}
+      <section className="sec"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.sigL}</span><H as="h2" className="rv" style={d(0.08)} html={t.sigH} /></div>
+          <div className="sbt rv" data-for="scr"><button data-s="-1" aria-label="Previous"><Ico k="left" sw={1.5} /></button><button data-s="1" aria-label="Next"><Ico k="right" sw={1.5} /></button></div></div>
+        <div className="scr rv" id="scr">{pick(SIG).filter((p) => p.img).map((p, i) => <Card key={p.id} p={p} i={i} lang={lang} />)}</div>
+      </div></section>
 
-        {/* SERVICES */}
-        <section id="services" className="sec">
-          <div className="wrap">
-            <div className="head" data-reveal>
-              <p className="eyebrow">{t.services.eyebrow}</p>
-              <h2><Title a={t.services.title1} b={t.services.title2} /></h2>
-              <p className="sub">{t.services.text}</p>
-            </div>
+      {/* PROMISE */}
+      <section className="sec"><div className="w"><span className="eyb rv">{t.prL}</span>
+        <div className="pr">{c.promise.items.map((r, i) => <div key={r.title} className="rv" style={d(i * 0.08)}><span className="k">0{i + 1}</span><h4>{r.title}</h4><p>{r.text}</p></div>)}</div>
+      </div></section>
 
-            <div className="svc-label" data-reveal><span className="tag">{t.services.hwTag}</span><p>{t.services.hwText}</p></div>
-            <div className="grid3">
-              {t.hardware.map((r, i) => (
-                <article className="card svc" key={r.title} data-reveal style={d(i % 3)}>
-                  <div className="ico"><Icon name={r.icon} /></div>
-                  <h3>{r.title}</h3>
-                  <ul>{r.points.map((p) => <li key={p}><Icon name="check" size={14} />{p}</li>)}</ul>
-                  <a className="more" href={wa(t.services.quoteMsg(r.title))}>{t.services.quote} <span>{t.arrow}</span></a>
-                </article>
-              ))}
-            </div>
+      {/* WORKSHOP */}
+      <section className="sec" id="services"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.wkL}</span><H as="h2" className="rv" style={d(0.08)} html={t.wkH} /></div><p className="rv" style={d(0.16)}>{t.wkP}</p></div>
+        <div className="wk">
+          {workshop.map((w, i) => (
+            <a key={w.key} className={`wt rv wt${i + 1}`} style={d((i % 3) * 0.08)} target="_blank" rel="noopener" href={wa(t.waS(w.msg))}>
+              <img src={w.img} alt={w[lang][0]} loading="lazy" />
+              <div className="wc"><span className="k">0{i + 1}</span><h3>{w[lang][0]}</h3><p>{w[lang][1]}</p><span className="wfix"><WaIcon />{t.fix}</span></div>
+            </a>
+          ))}
+        </div>
+        <div className="wks rv">{t.wkStats.map((s) => <div key={s[0]}><b>{s[0]}</b><small>{s[1]}</small></div>)}</div>
+        <p className="cred">{t.photos}: {workshop.map((w, i) => <span key={w.key}>{i ? ", " : ""}<a href={credit(w.ref)} target="_blank" rel="noopener">{w.by}</a></span>)} / <a href="https://unsplash.com/?utm_source=kenz_mobile_phones&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>
+      </div></section>
 
-            <div className="svc-label" data-reveal><span className="tag">{t.services.swTag}</span><p>{t.services.swText}</p></div>
-            <div className="grid4">
-              {t.software.map((r, i) => (
-                <article className="card svc" key={r.title} data-reveal style={d(i)}>
-                  <div className="ico"><Icon name={r.icon} /></div>
-                  <h3>{r.title}</h3>
-                  <ul>{r.points.map((p) => <li key={p}><Icon name="check" size={14} />{p}</li>)}</ul>
-                  <a className="more" href={wa(t.services.askMsg(r.title))}>{t.services.ask} <span>{t.arrow}</span></a>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+      {/* SERVICES BAND */}
+      <div className="w"><div className="band"><div className="svc">
+        <div><span className="eyb rv">{t.svL}</span><H as="h2" className="rv" style={{ marginTop: 18 }} html={t.svH} /><p className="rv">{t.svP}</p>
+          <div className="row rv"><a className="btn gd" target="_blank" rel="noopener" href={wa(t.waS(t.services))}><WaIcon />{t.ask}</a><a className="btn lt" href={`tel:${site.phoneIntl}`}>{t.callUs}</a></div></div>
+        <ul className="svl">{services.map((s, i) => (
+          <li key={s.title} className="rv" style={d(i * 0.04)}><div><b>{s.title}</b><small>{s.points.slice(0, 2).join(" · ")}</small></div>
+            <a target="_blank" rel="noopener" href={wa(t.waS(s.title))} aria-label={s.title}><Ico k="arrow" sw={1.5} /></a></li>
+        ))}</ul>
+      </div></div></div>
 
-        {/* PICKUP + TRADE-IN */}
-        <section className="sec tight">
-          <div className="wrap duo">
-            <article className="feature dark" data-reveal>
-              <div className="ico y"><Icon name="pickup" size={24} /></div>
-              <p className="eyebrow">{t.pickup.eyebrow}</p>
-              <h3 className="fh">{t.pickup.title}</h3>
-              <p>{t.pickup.text}</p>
-              <a className="btn btn-yellow sm" href={wa(t.pickup.waMsg)}>{t.pickup.cta}</a>
+      {/* PICKUP + TRADE-IN */}
+      <section className="sec"><div className="w"><span className="eyb rv">{t.duoL}</span>
+        <div className="duo">
+          {[[c.pickup, "pickup", true], [c.trade, "swap", false]].map(([f, ic, dk], i) => (
+            <article key={ic} className={`ft2 rv${dk ? " dk" : ""}`} style={d(i * 0.1)}>
+              <span className="fi"><Ico k={ic} sw={1.4} /></span>
+              <span className="eyb">{f.eyebrow}</span><h3>{f.title}</h3><p>{f.text}</p>
+              <a className={`btn ${dk ? "gd" : "dk"} sm`} target="_blank" rel="noopener" href={wa(f.waMsg)}><WaIcon />{f.cta}</a>
             </article>
-            <article className="feature" data-reveal style={d(1)}>
-              <div className="ico"><Icon name="swap" size={24} /></div>
-              <p className="eyebrow">{t.trade.eyebrow}</p>
-              <h3 className="fh">{t.trade.title}</h3>
-              <p>{t.trade.text}</p>
-              <a className="btn btn-line sm" href={wa(t.trade.waMsg)}>{t.trade.cta}</a>
-            </article>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div></section>
 
-        {/* PROCESS */}
-        <section className="sec alt">
-          <div className="wrap">
-            <div className="head center" data-reveal>
-              <p className="eyebrow center">{t.process.eyebrow}</p>
-              <h2><Title a={t.process.title1} b={t.process.title2} /></h2>
-            </div>
-            <ol className="steps">
-              {t.process.steps.map((s, i) => (
-                <li key={s.title} data-reveal style={d(i)}>
-                  <span className="num">0{i + 1}</span>
-                  <h3>{s.title}</h3>
-                  <p>{s.text}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
+      {/* FAQ */}
+      <section className="sec"><div className="w faq">
+        <div className="sh" style={{ display: "block" }}><span className="eyb rv">{t.faqL}</span><H as="h2" className="rv" style={d(0.08)} html={t.faqH} /></div>
+        <div>{c.faq.items.map((f, i) => <details key={f.q} className="rv" style={d((i % 4) * 0.05)}><summary>{f.q}<i /></summary><p>{f.a}</p></details>)}</div>
+      </div></section>
 
-        {/* PROMISE */}
-        <section id="promise" className="sec">
-          <div className="wrap">
-            <div className="head" data-reveal>
-              <p className="eyebrow">{t.promise.eyebrow}</p>
-              <h2><Title a={t.promise.title1} b={t.promise.title2} /></h2>
-              <p className="sub">{t.promise.text}</p>
-            </div>
-            <div className="grid4">
-              {t.promise.items.map((p, i) => (
-                <article className="card promise" key={p.title} data-reveal style={d(i)}>
-                  <div className="ico y"><Icon name={p.icon} size={24} /></div>
-                  <h3>{p.title}</h3>
-                  <p>{p.text}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* PRIVACY */}
-        <section className="sec privacy-sec">
-          <div className="wrap privacy">
-            <div className="lock-art" data-reveal>
-              <div className="ring r1" /><div className="ring r2" /><div className="ring r3" />
-              <div className="lock-core"><Icon name="lock" size={46} /></div>
-            </div>
-            <div data-reveal style={d(1)}>
-              <p className="eyebrow">{t.privacy.eyebrow}</p>
-              <h2><Title a={t.privacy.title1} b={t.privacy.title2} /></h2>
-              <ul className="checks">
-                {t.privacy.points.map((p) => (
-                  <li key={p}><Icon name="shield" size={19} /><span>{p}</span></li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* STORE */}
-        <section id="shop" className="sec">
-          <div className="wrap">
-            <div className="head" data-reveal>
-              <p className="eyebrow">{t.store.eyebrow}</p>
-              <h2><Title a={t.store.title1} b={t.store.title2} /></h2>
-              <p className="sub">{t.store.text}</p>
-            </div>
-            <div className="grid4">
-              {t.store.items.map((p, i) => (
-                <article className="card" key={p.title} data-reveal style={d(i % 4)}>
-                  <div className="ico sm"><Icon name={p.icon} size={19} /></div>
-                  <h3>{p.title}</h3>
-                  <p>{p.text}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* PAY */}
-        <section className="sec tight">
-          <div className="wrap pay" data-reveal>
-            <div>
-              <p className="eyebrow">{t.pay.eyebrow}</p>
-              <h2><Title a={t.pay.title1} b={t.pay.title2} /></h2>
-              <p className="sub">{t.pay.text}</p>
-            </div>
-            <div className="pay-badges">
-              {t.pay.badges.map((b) => <span className="badge" key={b}>{b}</span>)}
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="sec">
-          <div className="wrap narrow">
-            <div className="head" data-reveal>
-              <p className="eyebrow">{t.faq.eyebrow}</p>
-              <h2><Title a={t.faq.title1} b={t.faq.title2} /></h2>
-            </div>
-            {t.faq.items.map((f, i) => (
-              <details key={f.q} data-reveal style={d(i % 4)}>
-                <summary>{f.q}</summary>
-                <p>{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        {/* VISIT */}
-        <section id="visit" className="sec alt">
-          <div className="wrap visit">
-            <div data-reveal>
-              <p className="eyebrow">{t.visit.eyebrow}</p>
-              <h2>{t.visit.name}</h2>
-              <p className="alt-name" lang={t.visit.altLang} dir={t.visit.altLang === "ar" ? "rtl" : "ltr"}>{t.visit.altName}</p>
-              <dl>
-                <dt>{t.visit.addressLabel}</dt>
-                <dd>{t.visit.address}</dd>
-                <dt>{t.visit.hoursLabel}</dt>
-                <dd>{t.visit.hours}</dd>
-                <dt>{t.visit.phoneLabel}</dt>
-                <dd><a href={`tel:${site.phoneIntl}`} dir="ltr">{site.phoneDisplay}</a></dd>
-              </dl>
-              <div className="cta">
-                <a className="btn btn-dark" href={wa(t.visit.waMsg)}><WaIcon /> {t.visit.wa}</a>
-                <a className="btn btn-line" href={site.mapsLink} target="_blank" rel="noopener">{t.visit.directions}</a>
-              </div>
-            </div>
-            <div className="map-wrap" data-reveal style={d(1)}>
-              <iframe
-                className="map"
-                src={`${site.mapEmbed}&hl=${t.lang}`}
-                title={t.visit.mapTitle}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <Footer t={t} page="home" />
-    </>
+      {/* VISIT */}
+      <section className="sec" id="visit"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.viL}</span><H as="h2" className="rv" style={d(0.08)} html={t.viH} /></div><p className="rv">{t.viP}</p></div>
+        <div className="vis">
+          <a className="map rv" href={site.mapsLink} target="_blank" rel="noopener">
+            <div className="grd" /><div className="pin"><img src="/logo-mark-sm.png" alt="" /></div>
+            <h3>{t.addr}</h3><span className="lk" style={{ marginTop: 14, alignSelf: "flex-start" }}>{t.dir} <Arrow /></span>
+          </a>
+          <div className="vc rv" style={d(0.1)}><ul className="vl">
+            <li><span>{t.waL}</span><a dir="ltr" target="_blank" rel="noopener" href={wa(t.waHi)}>{site.phoneDisplay}</a></li>
+            <li><span>{t.callL}</span><a dir="ltr" href={`tel:${site.phoneIntl}`}>{site.phoneDisplay}</a></li>
+            <li><span>{t.hoursL}</span><b>{t.hours}</b></li>
+            <li><span>{t.payL}</span><b>{t.pay}</b></li>
+            <li><span>{t.dir}</span><a href={site.mapsLink} target="_blank" rel="noopener">Google Maps <Arrow /></a></li>
+          </ul></div>
+        </div>
+      </div></section>
+    </Site>
   );
 }
+
