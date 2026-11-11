@@ -43,7 +43,12 @@ const phoneItems = phones.map((p) => {
   };
 });
 
-const accItems = accessories.map((a) => {
+// Only recognised brands are shown on the site (client request: premium, genuine image).
+// Other rows stay in accessories.js so they can be switched back on by adding the brand here.
+export const BRANDS = ["Apple", "Samsung", "Huawei", "JBL", "Anker", "Anker Soundcore", "Belkin", "UGREEN", "Baseus", "SanDisk", "Guess", "Swiss Military",
+  "Green Lion", "Porodo", "Powerology", "WiWU", "oraimo", "Acefast", "Choetech"];
+
+const accItems = accessories.filter((a) => BRANDS.includes(a.brand)).map((a) => {
   const f = photoFile(a);
   return {
     id: f,
@@ -58,6 +63,11 @@ const accItems = accessories.map((a) => {
 });
 
 export const items = [...phoneItems, ...accItems];
+// hide empty categories / departments
+const used = new Set(items.map((i) => i.c));
+categories.splice(0, categories.length, ...categories.filter((c) => used.has(c.key)));
+departments.forEach((d) => { d.cats = d.cats.filter((c) => used.has(c)); });
+departments.splice(0, departments.length, ...departments.filter((d) => d.cats.length));
 export const byId = (id) => items.find((i) => i.id === id);
 export const phoneList = phoneItems;
 export const brandCount = new Set(items.map((i) => i.b).filter(Boolean)).size;

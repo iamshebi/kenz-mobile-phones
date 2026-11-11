@@ -15,7 +15,7 @@ const Logo = ({ t }) => (
 // alt: the same page in the other language
 export default function Site({ lang, page, alt, children }) {
   const t = T[lang];
-  const nav = [[path(lang, "/shop"), t.shop, "shop"], [path(lang, "/#departments"), t.depts], [path(lang, "/#services"), t.services], [path(lang, "/#visit"), t.visit]];
+  const nav = [[path(lang, "/#services"), t.services], [path(lang, "/shop"), t.shop, "shop"], [path(lang, "/#genuine"), t.why], [path(lang, "/#visit"), t.visit]];
   return (
     <>
       <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('kz-seen'))document.documentElement.classList.add('seen');sessionStorage.setItem('kz-seen','1')}catch(e){}" }} />

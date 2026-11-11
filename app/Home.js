@@ -9,7 +9,7 @@ const d = (i) => ({ "--d": `${i}s` });
 
 const HERO = ["galaxy-s26-ultra-cobalt-violet-1-tb", "iphone-18-pro-max-burgundy-2-tb", "apple-airpods-max-2", "samsung-galaxy-watch-ultra"];
 const SIG = ["apple-airpods-pro-3", "samsung-galaxy-buds4-pro", "apple-airpods-max-2", "samsung-galaxy-watch-ultra", "apple-magsafe-charger-1-m", "apple-iphone-air-magsafe-battery", "samsung-galaxy-watch8", "apple-airtag-4-pack", "green-lion-qi2-2-mag-flex-3-in-1-wireless-charger", "apple-apple-pencil-usb-c", "green-lion-malaga-10000mah-magsafe-power-bank", "samsung-galaxy-smarttag2"];
-const MQ = ["Apple", "Samsung", "Huawei", "Anker", "Green Lion", "oraimo", "JBL", "Mevor", "Porodo", "SAAFO", "Soundcore", "Belkin", "UGREEN", "Powerology"];
+const MQ = ["Apple", "Samsung", "Huawei", "JBL", "Anker", "Belkin", "UGREEN", "Baseus", "SanDisk", "Green Lion", "Porodo", "Powerology", "WiWU", "Swiss Military"];
 
 // three photos for each department tile (first ones that have a photo)
 const PIN = { phones: ["iphone-18-pro-max-burgundy-2-tb", "galaxy-z-flip7-mint-256-gb", "iphone-air-sky-blue-256-gb"], genuine: ["apple-airpods-pro-3", "samsung-galaxy-buds4-pro", "apple-magsafe-charger-1-m"], wear: ["samsung-galaxy-watch-ultra", "samsung-galaxy-watch8", "green-lion-force-smart-watch"] };
@@ -34,7 +34,7 @@ export default function Home({ lang }) {
           <p className="lead rv" style={d(0.5)}>{t.lead}</p>
           <div className="row rv" style={d(0.62)}>
             <a className="btn dk" href={path(lang, "/shop")}>{t.explore} <Arrow /></a>
-            <a className="btn lt" target="_blank" rel="noopener" href={wa(t.waHi)}><WaIcon />{t.ask}</a>
+            <a className="btn lt" target="_blank" rel="noopener" href={wa(t.waS(t.services))}><WaIcon />{t.bookFix}</a>
           </div>
           <div className="stats rv" style={d(0.75)}>
             <div><b data-n={items.length} data-s="+">0</b><small>{t.st[0]}</small></div>
@@ -54,6 +54,36 @@ export default function Home({ lang }) {
       </div></section>
 
       <div className="mq" aria-hidden="true" dir="ltr"><div className="tr">{[...MQ, ...MQ].map((b, i) => <span key={i}>{b}</span>)}</div></div>
+
+      {/* GENUINE STANDARD */}
+      <section className="sec" id="genuine"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.genL}</span><H as="h2" className="rv" style={d(0.08)} html={t.genH} /></div><p className="rv" style={d(0.16)}>{t.genP}</p></div>
+        <div className="pr">{t.gen.map((r, i) => <div key={r[0]} className="rv" style={d(i * 0.08)}><span className="k">0{i + 1}</span><h4>{r[0]}</h4><p>{r[1]}</p></div>)}</div>
+      </div></section>
+
+      {/* WORKSHOP */}
+      <section className="sec" id="services"><div className="w">
+        <div className="sh"><div><span className="eyb rv">{t.wkL}</span><H as="h2" className="rv" style={d(0.08)} html={t.wkH} /></div><p className="rv" style={d(0.16)}>{t.wkP}</p></div>
+        <div className="wk">
+          {workshop.map((w, i) => (
+            <a key={w.key} className={`wt rv wt${i + 1}`} style={d((i % 3) * 0.08)} target="_blank" rel="noopener" href={wa(t.waS(w.msg))}>
+              <img src={w.img} alt={w[lang][0]} loading="lazy" />
+              <div className="wc"><span className="k">0{i + 1}</span><h3>{w[lang][0]}</h3><p>{w[lang][1]}</p><span className="wfix"><WaIcon />{t.fix}</span></div>
+            </a>
+          ))}
+        </div>
+        <p className="cred">{t.photos}: {workshop.map((w, i) => <span key={w.key}>{i ? ", " : ""}<a href={credit(w.ref)} target="_blank" rel="noopener">{w.by}</a></span>)} / <a href="https://unsplash.com/?utm_source=kenz_mobile_phones&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>
+      </div></section>
+
+      {/* SERVICES BAND */}
+      <div className="w"><div className="band"><div className="svc">
+        <div><span className="eyb rv">{t.svL}</span><H as="h2" className="rv" style={{ marginTop: 18 }} html={t.svH} /><p className="rv">{t.svP}</p>
+          <div className="row rv"><a className="btn gd" target="_blank" rel="noopener" href={wa(t.waS(t.services))}><WaIcon />{t.ask}</a><a className="btn lt" href={`tel:${site.phoneIntl}`}>{t.callUs}</a></div></div>
+        <ul className="svl">{services.map((s, i) => (
+          <li key={s.title} className="rv" style={d(i * 0.04)}><div><b>{s.title}</b><small>{s.points.slice(0, 2).join(" · ")}</small></div>
+            <a target="_blank" rel="noopener" href={wa(t.waS(s.title))} aria-label={s.title}><Ico k="arrow" sw={1.5} /></a></li>
+        ))}</ul>
+      </div></div></div>
 
       {/* DEPARTMENTS */}
       <section className="sec" id="departments"><div className="w">
@@ -88,35 +118,6 @@ export default function Home({ lang }) {
           </li>
         ))}</ul>
       </div></section>
-
-      {/* PROMISE */}
-      <section className="sec"><div className="w"><span className="eyb rv">{t.prL}</span>
-        <div className="pr">{c.promise.items.map((r, i) => <div key={r.title} className="rv" style={d(i * 0.08)}><span className="k">0{i + 1}</span><h4>{r.title}</h4><p>{r.text}</p></div>)}</div>
-      </div></section>
-
-      {/* WORKSHOP */}
-      <section className="sec" id="services"><div className="w">
-        <div className="sh"><div><span className="eyb rv">{t.wkL}</span><H as="h2" className="rv" style={d(0.08)} html={t.wkH} /></div><p className="rv" style={d(0.16)}>{t.wkP}</p></div>
-        <div className="wk">
-          {workshop.map((w, i) => (
-            <a key={w.key} className={`wt rv wt${i + 1}`} style={d((i % 3) * 0.08)} target="_blank" rel="noopener" href={wa(t.waS(w.msg))}>
-              <img src={w.img} alt={w[lang][0]} loading="lazy" />
-              <div className="wc"><span className="k">0{i + 1}</span><h3>{w[lang][0]}</h3><p>{w[lang][1]}</p><span className="wfix"><WaIcon />{t.fix}</span></div>
-            </a>
-          ))}
-        </div>
-        <p className="cred">{t.photos}: {workshop.map((w, i) => <span key={w.key}>{i ? ", " : ""}<a href={credit(w.ref)} target="_blank" rel="noopener">{w.by}</a></span>)} / <a href="https://unsplash.com/?utm_source=kenz_mobile_phones&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a></p>
-      </div></section>
-
-      {/* SERVICES BAND */}
-      <div className="w"><div className="band"><div className="svc">
-        <div><span className="eyb rv">{t.svL}</span><H as="h2" className="rv" style={{ marginTop: 18 }} html={t.svH} /><p className="rv">{t.svP}</p>
-          <div className="row rv"><a className="btn gd" target="_blank" rel="noopener" href={wa(t.waS(t.services))}><WaIcon />{t.ask}</a><a className="btn lt" href={`tel:${site.phoneIntl}`}>{t.callUs}</a></div></div>
-        <ul className="svl">{services.map((s, i) => (
-          <li key={s.title} className="rv" style={d(i * 0.04)}><div><b>{s.title}</b><small>{s.points.slice(0, 2).join(" · ")}</small></div>
-            <a target="_blank" rel="noopener" href={wa(t.waS(s.title))} aria-label={s.title}><Ico k="arrow" sw={1.5} /></a></li>
-        ))}</ul>
-      </div></div></div>
 
       {/* VISIT */}
       <section className="sec" id="visit"><div className="w">

@@ -550,3 +550,4 @@ html[lang=ar] .wc h3,html[lang=ar] .ft2 h3,html[lang=ar] .map h3{letter-spacing:
 .band em{color:var(--gold);background:none;padding:0}
 .svc{align-items:start}
 @media (min-width:1081px){.svc>div:first-child{position:sticky;top:120px}}
+.wt img{color:transparent;font-size:0}
