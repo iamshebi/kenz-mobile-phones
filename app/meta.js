@@ -1,5 +1,8 @@
 import { site, content } from "./content";
 
+// Link preview image (WhatsApp, Facebook, X…): 1200×630 banner, English or Arabic
+export const ogImage = (lang) => ({ url: lang === "ar" ? "/og-ar.jpg" : "/og.jpg", width: 1200, height: 630, alt: lang === "ar" ? "كنز للهواتف المتحركة، رأس الخيمة" : "KENZ Mobile Phones, Ras Al Khaimah" });
+
 export function buildMetadata(lang) {
   const t = content[lang];
   return {
@@ -14,10 +17,12 @@ export function buildMetadata(lang) {
     openGraph: {
       title: t.meta.title,
       description: t.meta.ogDescription,
-      images: ["/logo.jpg"],
+      images: [ogImage(lang)],
       type: "website",
+      siteName: lang === "ar" ? "كنز للهواتف المتحركة" : "KENZ Mobile Phones",
       locale: lang === "ar" ? "ar_AE" : "en_AE",
     },
+    twitter: { card: "summary_large_image", title: t.meta.title, description: t.meta.ogDescription, images: [ogImage(lang).url] },
   };
 }
 
@@ -62,6 +67,7 @@ export function shopMeta(lang) {
   return {
     title, description,
     alternates: { canonical: ar ? "/ar/shop" : "/shop", languages: { en: "/shop", ar: "/ar/shop" } },
-    openGraph: { title, description, images: ["/logo.jpg"], locale: ar ? "ar_AE" : "en_AE" },
+    openGraph: { title, description, images: [ogImage(lang)], type: "website", locale: ar ? "ar_AE" : "en_AE" },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage(lang).url] },
   };
 }

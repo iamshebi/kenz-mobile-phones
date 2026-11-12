@@ -1,4 +1,5 @@
 import Site from "./Site";
+import { ogImage } from "./meta";
 import { T, path } from "./ui";
 import { site } from "./content";
 import { items, byId, catName, deptOf, full, hasPr } from "./catalog";
@@ -16,7 +17,7 @@ export function productMeta(id, lang) {
     title: `${name} · ${t.brandFull} · ${lang === "ar" ? "رأس الخيمة" : "Ras Al Khaimah"}`,
     description: desc,
     alternates: { canonical: url, languages: { en: `/product/${p.id}`, ar: `/ar/product/${p.id}` } },
-    openGraph: { title: name, description: desc, images: [p.img || "/logo.jpg"], locale: lang === "ar" ? "ar_AE" : "en_AE" },
+    openGraph: { title: name, description: desc, images: [p.img || ogImage(lang)], locale: lang === "ar" ? "ar_AE" : "en_AE" },
   };
 }
 
