@@ -6,10 +6,12 @@ import { departments } from "./catalog";
 import { WaIcon } from "./kit";
 import { MegaMenu, Search } from "./Nav";
 import Pay from "./Pay";
+import ThemeToggle from "./ThemeToggle";
 
 const Logo = ({ t }) => (
   <a className="logo" href={path(t.lang)} aria-label={t.brandFull}>
-    <img src="/logo-mark-sm.png" alt="" width="25" height="30" />
+    <img className="lgl" src="/logo-mark-sm.png" alt="" width="25" height="30" />
+    <img className="lgd" src="/logo-mark-dark-sm.png" alt="" width="25" height="30" />
     <span><b>{t.brand}</b><small>{t.brandSub}</small></span>
   </a>
 );
@@ -20,14 +22,15 @@ export default function Site({ lang, page, alt, children }) {
   const nav = [[path(lang, "/#services"), t.services], [path(lang, "/shop"), t.shop, "shop"], [path(lang, "/#genuine"), t.why], [path(lang, "/#visit"), t.visit]];
   return (
     <>
-      <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('kz-seen'))document.documentElement.classList.add('seen');sessionStorage.setItem('kz-seen','1')}catch(e){}" }} />
-      <div className="curtain" aria-hidden="true"><img src="/logo-mark.png" alt="" /></div>
+      <script dangerouslySetInnerHTML={{ __html: "try{if(localStorage.getItem('kz-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}try{if(sessionStorage.getItem('kz-seen'))document.documentElement.classList.add('seen');sessionStorage.setItem('kz-seen','1')}catch(e){}" }} />
+      <div className="curtain" aria-hidden="true"><img className="lgl" src="/logo-mark.png" alt="" /><img className="lgd" src="/logo-mark-dark.png" alt="" /></div>
       <header id="hd">
         <div className="w bar">
           <Logo t={t} />
           <nav className="nv" aria-label={t.menu}>{nav.map((n) => n[2] === "shop" ? <MegaMenu key={n[0]} lang={lang} label={n[1]} active={page === "shop"} /> : <a key={n[0]} href={n[0]}>{n[1]}</a>)}</nav>
           <div className="hr">
             <Search lang={lang} />
+            <ThemeToggle lang={lang} />
             <a className="lang" href={alt} hrefLang={t.other} lang={t.other}>{t.otherLabel}</a>
             <a className="btn dk sm" target="_blank" rel="noopener" href={wa(t.waHi)}><WaIcon /><span>{t.msg}</span></a>
             <button className="burger" id="bg" aria-label={t.menu} aria-expanded="false"><i /></button>

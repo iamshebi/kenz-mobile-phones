@@ -10,7 +10,7 @@ export const metadata = buildMetadata("ar");
 
 export default function ArabicLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html suppressHydrationWarning lang="ar" dir="rtl">
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema("ar")) }} />
         {children}

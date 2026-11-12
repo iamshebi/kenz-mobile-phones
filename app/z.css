@@ -681,3 +681,57 @@ nav.nv .mmp .mmt,nav.nv .mmp .mmc a,nav.nv .mmp .mmd a{padding:10px 12px}
   .pb3 .btn{padding:0 8px;gap:7px;font-size:13.5px}
   .pb3 .btn svg{width:16px;height:16px}
 }
+
+/* ================= Dark theme (toggle in the header) =================
+   Only the page background turns black and its text turns white.
+   White panels (product cards, menus, search, info boxes) stay exactly as in the light theme. */
+:root{--onink:#fff}
+.tgl{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--line2);flex:none;transition:box-shadow .3s,background .3s}
+.tgl:hover{box-shadow:inset 0 0 0 1px var(--ink)}
+.tgl svg{width:18px;height:18px}
+.tgl .sun,.logo .lgd,.curtain .lgd{display:none}
+html.dark .tgl .sun{display:block}html.dark .tgl .moon{display:none}
+html.dark .logo .lgl,html.dark .curtain .lgl{display:none}html.dark .logo .lgd,html.dark .curtain .lgd{display:block}
+html.dark{color-scheme:dark;--bg:#0A0A0A;--ivory:#1A1A19;--sand:#222220;--ink:#F5F4F0;--ink2:#DEDCD6;--mut:#A3A19B;--line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.24);--goldt:#F2C14A;--onink:#0A0A0A;--sh:0 1px 2px rgba(0,0,0,.3),0 12px 32px -12px rgba(0,0,0,.6);--sh2:0 2px 4px rgba(0,0,0,.3),0 30px 60px -20px rgba(0,0,0,.7)}
+/* white "islands": restore the light-theme colours inside them */
+html.dark :where(.c,.dp:not(.dk),.vc,.map,.ask,.pl-band,.pl-pdp,.pl-strip,.pim,.th button,.mmp,.gsp,.q,.sel,.dchips,.tabs,.ft2:not(.dk),.mq,.fl,.tag,.pin2 .note,.wks,.chip,.empty b){--bg:#FBFAF7;--ivory:#F4F2EC;--sand:#ECE8DF;--ink:#0A0A0A;--ink2:#2B2A27;--mut:#6B6A66;--line:rgba(10,10,10,.08);--line2:rgba(10,10,10,.15);--goldt:#8A6500;--onink:#fff;color-scheme:light}
+html.dark :where(.c,.dp:not(.dk),.vc,.map,.ask,.pl-band,.pl-pdp,.pl-strip,.mmp,.gsp,.ft2:not(.dk),.mq,.fl,.pin2 .note,.wks,.tag,.chip,.q input,.sel,.dchips button,.tabs button,.th button){color:var(--ink)}
+html.dark .empty b{--ink:#F5F4F0}
+/* buttons and chips that sit on an --ink background */
+html.dark :is(.btn.dk,.btn.dk:hover,.btn.lt:hover,.btn.gd:hover,.dp:hover .go,.sbt button:hover,.bchips button.on,.dchips button.on,.tabs button.on,.gsq button:hover,.wa.buy:hover){color:var(--onink)}
+html.dark .btn.dk::before{background:var(--gold)}
+html.dark .btn.dk:hover{color:#0A0A0A}
+/* yellow backgrounds always keep black text */
+html.dark :is(.btn.gd,.wa.buy,.chip.y,.fi,.wfix,.svl a:hover,.dp.dk:hover .go,.mnav .btn.gd){color:#0A0A0A}
+html.dark :is(.btn.gd:hover,.wa.buy:hover){color:#0A0A0A}
+html.dark :is(.btn.gd,.wa.buy:hover)::before{background:#fff}
+html.dark .wa.buy:hover{background:#fff}
+/* sections that are meant to stay dark: lift them a little off the black page */
+html.dark :is(.band,.dp.dk,.ft2.dk,.wt){background:#161615;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+html.dark .band .btn.lt:hover{color:#0A0A0A}
+/* page chrome */
+html.dark header.s{background:rgba(10,10,10,.82);box-shadow:0 1px 0 var(--line)}
+html.dark :is(nav.nv a:hover,.mm>a:hover,.mm.open>a){background:rgba(255,255,255,.08)}
+html.dark .plist li:hover{background:rgba(255,255,255,.05)}
+html.dark .wa{background:#1A1A19}
+html.dark .c .wa,html.dark .ask .wa{background:var(--bg)}
+html.dark .wa:hover{background:#1F8F55;color:#fff}
+html.dark em{background:none;color:var(--gold)}
+html.dark :is(.c,.dp:not(.dk),.vc,.ask,.pl-band,.mq) em{color:inherit;background:linear-gradient(transparent 60%,var(--gold) 60%,var(--gold) 90%,transparent 90%)}
+html.dark .stage .ring{border-color:rgba(255,255,255,.16)}
+html.dark .huge{-webkit-text-stroke:1px rgba(255,255,255,.18)}
+html.dark .gsb kbd{background:#1A1A19}
+html.dark body.so::after{background:rgba(0,0,0,.6)}
+html.dark .fwa{box-shadow:0 12px 30px -8px rgba(0,0,0,.7)}
+html.dark .spec a{border-color:var(--line2)}
+html.dark .c,html.dark .dp:not(.dk),html.dark .pim{box-shadow:none}
+@media (max-width:640px){.tgl{width:38px;height:38px}}
+/* theme switch animation */
+html.vt-theme::view-transition-old(root),html.vt-theme::view-transition-new(root){animation:none;mix-blend-mode:normal}
+html.vt-theme::view-transition-old(root){z-index:1}html.vt-theme::view-transition-new(root){z-index:2}
+html.vt-theme .pim img{view-transition-name:none}
+html.theme-fade,html.theme-fade *,html.theme-fade *::before,html.theme-fade *::after{transition:background-color .6s var(--e),color .6s var(--e),border-color .6s var(--e),box-shadow .6s var(--e),-webkit-text-stroke-color .6s var(--e)!important}
+.tgl svg{transition:transform .6s var(--e),opacity .4s}
+.tgl:active svg{transform:rotate(-30deg) scale(.9)}
+html.dark .tgl .sun{animation:tglIn .6s var(--e)}html:not(.dark) .tgl .moon{animation:tglIn .6s var(--e)}
+@keyframes tglIn{from{transform:rotate(-90deg) scale(.6);opacity:0}to{transform:none;opacity:1}}
