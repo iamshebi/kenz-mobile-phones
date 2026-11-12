@@ -24,7 +24,10 @@ export default function Fx() {
 
     // mobile menu
     const bg = document.getElementById("bg");
-    const setMenu = (open) => { document.body.classList.toggle("mo", open); bg?.setAttribute("aria-expanded", String(open)); };
+    // while the menu is open the page behind it must not scroll (html lock + block touch-drag outside the menu)
+    const setMenu = (open) => { document.body.classList.toggle("mo", open); document.documentElement.classList.toggle("mo", open); bg?.setAttribute("aria-expanded", String(open)); };
+    on(document, "touchmove", (e) => { if (document.body.classList.contains("mo") && !e.target.closest(".mnav")) e.preventDefault(); }, { passive: false });
+    on(window, "wheel", (e) => { if (document.body.classList.contains("mo") && !e.target.closest(".mnav")) e.preventDefault(); }, { passive: false });
     bg && on(bg, "click", () => setMenu(!document.body.classList.contains("mo")));
     on(window, "keydown", (e) => { if (e.key === "Escape") setMenu(false); });
     $$(".mnav a").forEach((a) => on(a, "click", () => setMenu(false)));

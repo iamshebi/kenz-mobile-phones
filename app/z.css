@@ -68,7 +68,8 @@ body.mo .burger i::before{top:0;transform:rotate(45deg)}
 body.mo .burger i::after{top:0;transform:rotate(-45deg)}
 .mnav{position:fixed;left:0;right:0;top:76px;bottom:0;height:calc(100dvh - 76px);z-index:39;visibility:hidden;background:var(--bg);padding:24px clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:2px;clip-path:inset(0 0 100% 0);transition:clip-path .7s var(--e2);overflow:auto}
 body.mo .mnav{clip-path:inset(0);visibility:visible}
-body.mo{overflow:hidden}
+html.mo{overflow:hidden;overscroll-behavior:none}
+.mnav{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 body.mo header{background:var(--bg);box-shadow:0 1px 0 var(--line)}
 .mnav{transition:clip-path .7s var(--e2),visibility 0s linear .7s}
 body.mo .mnav{transition:clip-path .7s var(--e2),visibility 0s}
@@ -735,3 +736,4 @@ html.theme-fade,html.theme-fade *,html.theme-fade *::before,html.theme-fade *::a
 .tgl:active svg{transform:rotate(-30deg) scale(.9)}
 html.dark .tgl .sun{animation:tglIn .6s var(--e)}html:not(.dark) .tgl .moon{animation:tglIn .6s var(--e)}
 @keyframes tglIn{from{transform:rotate(-90deg) scale(.6);opacity:0}to{transform:none;opacity:1}}
+html.dark body.mo header{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}
