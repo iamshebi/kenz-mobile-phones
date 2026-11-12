@@ -4,6 +4,8 @@ import { T, wa, path } from "./ui";
 import { site } from "./content";
 import { departments } from "./catalog";
 import { WaIcon } from "./kit";
+import { MegaMenu, Search } from "./Nav";
+import Pay from "./Pay";
 
 const Logo = ({ t }) => (
   <a className="logo" href={path(t.lang)} aria-label={t.brandFull}>
@@ -23,8 +25,9 @@ export default function Site({ lang, page, alt, children }) {
       <header id="hd">
         <div className="w bar">
           <Logo t={t} />
-          <nav className="nv" aria-label={t.menu}>{nav.map((n) => <a key={n[0]} href={n[0]} className={n[2] === page ? "on" : undefined}>{n[1]}</a>)}</nav>
+          <nav className="nv" aria-label={t.menu}>{nav.map((n) => n[2] === "shop" ? <MegaMenu key={n[0]} lang={lang} label={n[1]} active={page === "shop"} /> : <a key={n[0]} href={n[0]}>{n[1]}</a>)}</nav>
           <div className="hr">
+            <Search lang={lang} />
             <a className="lang" href={alt} hrefLang={t.other} lang={t.other}>{t.otherLabel}</a>
             <a className="btn dk sm" target="_blank" rel="noopener" href={wa(t.waHi)}><WaIcon /><span>{t.msg}</span></a>
             <button className="burger" id="bg" aria-label={t.menu} aria-expanded="false"><i /></button>
@@ -44,6 +47,7 @@ export default function Site({ lang, page, alt, children }) {
             <div><h5>{t.fStore}</h5><a href={path(lang, "/#services")}>{t.services}</a><a href={path(lang, "/#visit")}>{t.visit}</a><a href={site.mapsLink} target="_blank" rel="noopener">{t.dir}</a><span className="fh">{t.hours}</span></div>
             <div><h5>{t.waL}</h5><a href={wa(t.waHi)} target="_blank" rel="noopener" dir="ltr">{site.phoneDisplay}</a><a href={`tel:${site.phoneIntl}`}>{t.callL}</a><span className="fh">{t.pay}</span></div>
           </div>
+          <Pay lang={lang} variant="foot" />
           <div className="huge" aria-hidden="true">KENZ</div>
           <div className="fb"><span>© {new Date().getFullYear()} {t.brandFull} · {t.addr}</span><span>{t.rights}</span></div>
         </div>

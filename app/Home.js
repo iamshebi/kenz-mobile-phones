@@ -4,6 +4,7 @@ import { content, site } from "./content";
 import { items, departments, phoneList, brandCount, pick, catName, full, categories } from "./catalog";
 import { Card, Ico, Arrow, WaIcon, H, Lines, href, waP } from "./kit";
 import { workshop, credit } from "./workshop";
+import Pay from "./Pay";
 
 const d = (i) => ({ "--d": `${i}s` });
 
@@ -100,6 +101,8 @@ export default function Home({ lang }) {
           ); })}
         </div>
       </div></section>
+
+      <Pay lang={lang} />
 
       {/* SIGNATURE */}
       <section className="sec"><div className="w">

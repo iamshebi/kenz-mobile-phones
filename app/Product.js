@@ -3,6 +3,7 @@ import { T, path } from "./ui";
 import { site } from "./content";
 import { items, byId, catName, deptOf, full } from "./catalog";
 import { Card, Ico, Arrow, WaIcon, Lines, Visual, waP } from "./kit";
+import Pay from "./Pay";
 
 const SPEC = ["display", "chip", "camera", "front", "battery", "build"];
 
@@ -50,6 +51,7 @@ export default function Product({ id, lang }) {
               <a className="btn gd" target="_blank" rel="noopener" href={waP(p, lang)}><WaIcon />{t.enqL}</a>
               <a className="btn lt" href={`tel:${site.phoneIntl}`}>{t.callUs}</a>
             </div>
+            <div className="rv in" style={{ "--d": ".36s" }}><Pay lang={lang} variant="pdp" product={full(p)} /></div>
             <div className="note rv in" style={{ "--d": ".4s" }}><Ico k="info" sw={1.5} /><span>{t.pNote}</span></div>
             <ul className="spec rv in" style={{ "--d": ".48s" }}>
               {p.b && <li><span>{t.pBrand}</span><a href={path(lang, `/shop?b=${encodeURIComponent(p.b)}`)}>{p.b}</a></li>}
