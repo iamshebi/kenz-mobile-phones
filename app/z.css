@@ -647,3 +647,4 @@ nav.nv .mmp a::after{display:none}
 nav.nv .mmp a{border-radius:12px}
 nav.nv .mmp .mmt,nav.nv .mmp .mmc a,nav.nv .mmp .mmd a{padding:10px 12px}
 .gsf input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.pl-note{display:block;color:var(--mut);font-size:12px;margin-top:14px}.pl-tamara{display:block;border-radius:6px}
