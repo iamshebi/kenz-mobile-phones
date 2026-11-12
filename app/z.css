@@ -648,3 +648,36 @@ nav.nv .mmp a{border-radius:12px}
 nav.nv .mmp .mmt,nav.nv .mmp .mmc a,nav.nv .mmp .mmd a{padding:10px 12px}
 .gsf input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
 .pl-note{display:block;color:var(--mut);font-size:12px;margin-top:14px}.pl-tamara{display:block;border-radius:6px}
+
+/* ---------- stock labels ---------- */
+.chip.st-out{background:#FBEAE7;color:#B4382B;box-shadow:none;font-weight:600}
+.chip.st-soon{background:var(--goldl);color:var(--goldt);box-shadow:none;font-weight:600}
+.chip.inl{position:static;display:inline-block;margin-inline-start:8px;vertical-align:1px;backdrop-filter:none}
+
+/* ---------- prices + Buy now ---------- */
+.prc{display:block;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:400;font-size:16px;letter-spacing:0;color:var(--ink);margin-top:8px;font-variant-numeric:tabular-nums;font-style:normal;white-space:nowrap}
+.prc.big{font-size:clamp(26px,2.6vw,34px);letter-spacing:-.01em;margin-top:0}
+.pprice{margin-top:22px}
+.pin2 .pprice+.row{margin-top:20px}
+.c .ft.has-pr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.c .ft.has-pr .wa,.plb .wa{width:100%;min-width:0;justify-content:center;margin:0;padding:0 10px;white-space:nowrap}
+.wa.buy{background:var(--gold);color:var(--ink)}
+.wa.buy:hover{background:var(--ink);color:#fff}
+.pb3{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:100%;max-width:560px}
+.pb3 .btn{width:100%;min-width:0;padding:0 12px;white-space:nowrap}
+.pb3 .lg{display:none}
+.plb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;flex:none;margin-inline-end:8px}
+.plb{width:224px}
+.plb.one{display:flex;justify-content:flex-end}
+.plist .pd .prc{display:inline;font-size:14px;margin:0;margin-inline-start:6px}
+.sp-pr,.mmtx i.mp{color:var(--ink);font-weight:400;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-style:normal}
+@media (max-width:640px){
+  .prc{font-size:15px}
+  .c .ft.has-pr{grid-template-columns:minmax(0,1fr)}
+  .plist li{flex-wrap:wrap}
+  .plb{margin:0 0 12px;width:100%}
+  .plb.one{display:grid;grid-template-columns:minmax(0,1fr)}
+  .pb3{gap:8px;max-width:none}
+  .pb3 .btn{padding:0 8px;gap:7px;font-size:13.5px}
+  .pb3 .btn svg{width:16px;height:16px}
+}

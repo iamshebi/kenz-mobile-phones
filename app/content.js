@@ -101,7 +101,7 @@ const en = {
       model: "Model", color: "Colour", storage: "Storage", chip: "Chip", display: "Display", camera: "Camera",
       outro: "Could you please share today's price and availability?",
     },
-    note: "Prices are shared on WhatsApp. Stock changes daily, so message us to confirm availability. Product images are illustrations.",
+    note: "Stock changes daily, so message us on WhatsApp to confirm availability.",
     sheetNote: "Message us on WhatsApp for today's price and availability. Tabby and Tamara instalments available.",
   },
   highlights: withIcons("highlights", [
@@ -296,7 +296,7 @@ const ar = {
       model: "الطراز", color: "اللون", storage: "السعة", chip: "المعالج", display: "الشاشة", camera: "الكاميرا",
       outro: "هل يمكنكم إرسال سعر اليوم وتأكيد التوفر؟",
     },
-    note: "نشارك الأسعار عبر واتساب. يتغير المخزون يومياً، لذا راسلنا لتأكيد التوفر. صور المنتجات رسوم توضيحية.",
+    note: "يتغير المخزون يومياً، لذا راسلنا على واتساب لتأكيد التوفر.",
     sheetNote: "راسلنا على واتساب لمعرفة سعر اليوم والتوفر. التقسيط متاح عبر تابي وتمارا.",
   },
   highlights: withIcons("highlights", [

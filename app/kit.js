@@ -1,7 +1,7 @@
 // Small shared pieces used by server pages and the client shop: icons, product card, WhatsApp links.
 import { T, wa, path } from "./ui";
 import { site } from "./content";
-import { catName, full } from "./catalog";
+import { catName, full, hasPr, fmtPr } from "./catalog";
 
 const P = {
   phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M10.5 5h3"/>',
@@ -49,34 +49,57 @@ export const Lines = ({ arr, base = 0.15 }) => arr.map((s, i) => (
 export const purl = (p, lang) => `${site.url}${path(lang, `/product/${p.id}`)}`;
 export const href = (p, lang) => path(lang, `/product/${p.id}`);
 
-// WhatsApp enquiry with the product's details prefilled
+// WhatsApp enquiry with the product's details prefilled (fully in the page language)
+const L = {
+  en: { col: "Colour", sto: "Storage", chip: "Chip", disp: "Display", cam: "Camera", br: "Brand", det: "Details", cat: "Category" },
+  ar: { col: "اللون", sto: "السعة", chip: "المعالج", disp: "الشاشة", cam: "الكاميرا", br: "الماركة", det: "التفاصيل", cat: "الفئة" },
+};
 export function waP(p, lang) {
-  const t = T[lang], cat = catName(p.c, "en");
-  const lines = p.k === "phone"
-    ? [`Colour: ${p.color.en}`, `Storage: ${p.storage}`, `Chip: ${p.specs.chip.en}`, `Display: ${p.specs.display.en}`, `Camera: ${p.specs.camera.en}`]
-    : [p.b && `Brand: ${p.b}`, p.d.en && `Details: ${p.d.en}`, `Category: ${cat}`].filter(Boolean);
+  const t = T[lang], l = L[lang], cat = catName(p.c, lang);
+  const lines = p.k === "phone" && p.specs
+    ? [p.color ? `${l.col}: ${p.color[lang]}` : p.d[lang] && `${l.det}: ${p.d[lang]}`, p.storage && `${l.sto}: ${p.storage}`, `${l.chip}: ${p.specs.chip[lang]}`, `${l.disp}: ${p.specs.display[lang]}`, `${l.cam}: ${p.specs.camera[lang]}`].filter(Boolean)
+    : [p.b && `${l.br}: ${p.b}`, p.d[lang] && `${l.det}: ${p.d[lang]}`, `${l.cat}: ${cat}`].filter(Boolean);
   return wa(t.waP({ name: full(p), lines }, purl(p, lang)));
 }
+
+// Buy now: WhatsApp order message with the price
+export const BUY = {
+  en: { b: "Buy now", bl: "Buy now on WhatsApp", m: (n, d, pr, u) => ["Hello KENZ Mobile Phones 👋", "I'd like to buy:", "", `• ${n}`, ...(d ? [`• ${d}`] : []), `• Price: ${pr}`, "", "Please confirm availability, payment and delivery or pickup.", u].join("\n") },
+  ar: { b: "اشترِ الآن", bl: "اشترِ الآن عبر واتساب", m: (n, d, pr, u) => ["مرحباً كنز للهواتف المتحركة 👋", "أود شراء:", "", `• ${n}`, ...(d ? [`• ${d}`] : []), `• السعر: ${pr}`, "", "يرجى تأكيد التوفر وطريقة الدفع والتوصيل أو الاستلام.", u].join("\n") },
+};
+export const waBuy = (p, lang) => wa(BUY[lang].m(full(p), p.d[lang], fmtPr(p.pr, lang), purl(p, lang)));
+
+// "AED 1,899.00" / "1,899.00 درهم" — one plain line, same style for currency and number
+export const Price = ({ p, lang, className = "" }) => hasPr(p) ? <span className={`prc ${className}`.trim()} dir={lang === "ar" ? "rtl" : "ltr"}>{fmtPr(p.pr, lang)}</span> : null;
+
+const STL = { out: { en: "Out of stock", ar: "غير متوفر حالياً" }, soon: { en: "Coming soon", ar: "قريباً" } };
+export const stLabel = (p, lang) => (p.st && STL[p.st] ? STL[p.st][lang] : "");
+export const StChip = ({ p, lang, className = "" }) => p.st && STL[p.st] ? <span className={`chip st-${p.st} ${className}`.trim()}>{STL[p.st][lang]}</span> : null;
+
+// Card / list buttons: Buy now + Enquire when priced, Enquire only otherwise
+export const BuyBtns = ({ p, lang }) => hasPr(p)
+  ? <><a className="wa buy" target="_blank" rel="noopener" href={waBuy(p, lang)}><WaIcon />{BUY[lang].b}</a><a className="wa" target="_blank" rel="noopener" href={waP(p, lang)}>{T[lang].enq}</a></>
+  : <a className="wa" target="_blank" rel="noopener" href={waP(p, lang)}><WaIcon />{T[lang].enq}</a>;
 
 export const Visual = ({ p, big, lang }) => p.img
   ? <img src={p.img} alt={full(p)} width="800" height="800" {...(big ? { fetchPriority: "high" } : { loading: "lazy", decoding: "async" })} />
   : <div className="ph"><Ico k={catIcon(p.c)} sw={big ? 1 : 1.1} /><b>{p.n.split(/\s+/).slice(0, 4).join(" ")}</b><small>{T[lang].photo}</small></div>;
 
 export function Card({ p, i = 0, lang, fb }) {
-  const t = T[lang];
+  const t = T[lang], pr = hasPr(p);
   return (
     <article className={`c${p.k === "phone" ? " cp" : ""}`} style={{ "--i": i }} data-b={fb}>
       <a className="cv" href={href(p, lang)} aria-label={full(p)} />
       <div className="im"><Visual p={p} lang={lang} />
-        {p.tag ? <span className="chip">{p.tag[lang]}</span> : p.genuine ? <span className="chip y">{t.genuine}</span> : null}
+        {p.st ? <StChip p={p} lang={lang} /> : p.tag ? <span className="chip">{p.tag[lang]}</span> : p.genuine ? <span className="chip y">{t.genuine}</span> : null}
         {p.hex && <i className="sw" style={{ background: p.hex }} />}
       </div>
       <div className="bd">
         <div className="br">{p.b || catName(p.c, lang)}</div>
         <div className="nm">{p.n}</div>
         {p.d[lang] && <div className="dt">{p.d[lang]}</div>}
-        <div className="ft"><span className="cat">{catName(p.c, lang)}</span>
-          <a className="wa" target="_blank" rel="noopener" href={waP(p, lang)}><WaIcon />{t.enq}</a></div>
+        <Price p={p} lang={lang} />
+        <div className={`ft${pr ? " has-pr" : ""}`}>{!pr && <span className="cat">{catName(p.c, lang)}</span>}<BuyBtns p={p} lang={lang} /></div>
       </div>
     </article>
   );

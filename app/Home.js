@@ -1,8 +1,8 @@
 import Site from "./Site";
 import { T, wa, path } from "./ui";
 import { content, site } from "./content";
-import { items, departments, phoneList, brandCount, pick, catName, full, categories } from "./catalog";
-import { Card, Ico, Arrow, WaIcon, H, Lines, href, waP } from "./kit";
+import { items, departments, phoneList, brandCount, pick, catName, full, categories, hasPr } from "./catalog";
+import { Card, Ico, Arrow, WaIcon, H, Lines, href, waP, Price, StChip, BuyBtns } from "./kit";
 import { workshop, credit } from "./workshop";
 import Pay from "./Pay";
 
@@ -116,8 +116,8 @@ export default function Home({ lang }) {
         <div className="sh"><div><span className="eyb rv">{t.phL}</span><H as="h2" className="rv" style={d(0.08)} html={t.phH} /></div><a className="lk rv" href={path(lang, "/shop?d=phones")}>{t.phAll} <Arrow /></a></div>
         <ul className="plist">{phoneList.slice(0, 12).map((p, i) => (
           <li key={p.id} className="rv" style={d((i % 5) * 0.05)}>
-            <a className="pl" href={href(p, lang)}><span className="pb">{p.b}</span><span className="pn">{p.n}</span><span className="pd">{p.d[lang]}</span></a>
-            <a className="wa" target="_blank" rel="noopener" href={waP(p, lang)}><WaIcon />{t.enq}</a>
+            <a className="pl" href={href(p, lang)}><span className="pb">{p.b}</span><span className="pn">{p.n}</span><span className="pd">{p.d[lang]}{hasPr(p) && <> <Price p={p} lang={lang} /></>}{p.st && <> <StChip p={p} lang={lang} className="inl" /></>}</span></a>
+            <span className={hasPr(p) ? "plb" : "plb one"}><BuyBtns p={p} lang={lang} /></span>
           </li>
         ))}</ul>
       </div></section>

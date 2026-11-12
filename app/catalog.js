@@ -1,78 +1,58 @@
-// One catalogue for the whole site: the 20 phones + every accessory.
-// Each item has its own page at /product/<id> (English) and /ar/product/<id> (Arabic).
+// One catalogue for the whole site. The product list lives in /catalog.json, which the admin dashboard
+// (/admin) edits and publishes as a GitHub commit; Vercel then rebuilds the site.
+// Phone specs, colours and extra photo views stay in products.js / phonePhotos.js (linked by `x`).
+// Each visible item has its own page at /product/<id> (English) and /ar/product/<id> (Arabic).
+import data from "../catalog.json";
 import { products as phones } from "./products";
-import { accessories, categories as accCats } from "./accessories";
-import { PHOTOS, photoFile } from "./photos";
 import { PHONE_PHOTOS } from "./phonePhotos";
 
-const slug = (s) => s.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const SPEC = Object.fromEntries(phones.map((p) => [p.id, p]));
+const GENUINE = ["apple", "samsung", "huawei"];
 
-export const categories = [
-  { key: "iphone", en: "iPhone", ar: "آيفون" },
-  { key: "galaxy", en: "Samsung Galaxy", ar: "سامسونج جالكسي" },
-  ...accCats.map(({ key, en, ar }) => ({ key, en, ar })),
-];
+export const version = data.v || 0;
+export const categories = data.categories.map((c) => ({ key: c.id, en: c.en, ar: c.ar || c.en }));
 export const catName = (k, lang) => categories.find((c) => c.key === k)?.[lang] || "";
+const keyOf = (i) => (data.categories[i] || {}).id;
 
-// Departments group categories (Zaitoon-style). Order sets the home grid layout.
-export const departments = [
-  { id: "phones", en: "Smartphones", ar: "الهواتف الذكية", icon: "phone", cats: ["iphone", "galaxy"] },
-  { id: "genuine", en: "Genuine accessories", ar: "الإكسسوارات الأصلية", icon: "badge", cats: ["apple", "samsung", "huawei"] },
-  { id: "audio", en: "Audio", ar: "الصوتيات", icon: "head", cats: ["audio"] },
-  { id: "power", en: "Charging & power", ar: "الشحن والطاقة", icon: "bank", cats: ["chargers", "power", "cables"] },
-  { id: "car", en: "In the car", ar: "للسيارة", icon: "car", cats: ["car"] },
-  { id: "protect", en: "Cases & stands", ar: "الأغطية والحوامل", icon: "shield", cats: ["protection", "stands"] },
-  { id: "wear", en: "Smart watches", ar: "الساعات الذكية", icon: "watch", cats: ["watches"] },
-  { id: "living", en: "Bakhoor & care", ar: "البخور والعناية", icon: "leaf", cats: ["fragrance", "care"] },
-  { id: "create", en: "Creator & gaming", ar: "التصوير والألعاب", icon: "game", cats: ["creator", "tech"] },
-];
+// Departments group categories. Order sets the home grid layout.
+export const departments = data.departments.map((d) => ({ id: d.id, en: d.en, ar: d.ar || d.en, icon: d.icon || "spark", cats: d.cats.map(keyOf).filter(Boolean) }));
 export const deptOf = (cat) => departments.find((d) => d.cats.includes(cat));
 
-const phoneItems = phones.map((p) => {
-  const views = PHONE_PHOTOS[p.id] || [];
-  return {
-    id: slug(`${p.name} ${p.color.en} ${p.storage}`),
-    k: "phone",
-    b: p.brand === "iphone" ? "Apple" : "Samsung",
-    n: p.name,
-    d: { en: `${p.color.en} · ${p.storage}`, ar: `${p.color.ar} · ${p.storage}` },
-    c: p.brand,
-    img: views.includes("main") ? `/phones/${p.id}-main.webp` : null,
-    views: views.map((v) => ({ v, src: `/phones/${p.id}-${v}.webp` })),
-    color: p.color, hex: p.hex, storage: p.storage, tag: p.tag || null, specs: p.specs,
+const toItem = (r) => {
+  const s = r.x && SPEC[r.x], c = keyOf(r.c);
+  const img = r.i ? `/${r.i}` : null;
+  const base = {
+    id: r.id, b: r.b || "", n: r.n, c, img,
+    d: { en: r.d || "", ar: r.da || r.d || "" },
+    pr: typeof r.pr === "number" && r.pr > 0 ? r.pr : null,
+    st: r.st === "out" || r.st === "soon" ? r.st : null,
   };
-});
+  if (s) {
+    const views = (PHONE_PHOTOS[s.id] || []).map((v) => ({ v, src: v === "main" && img ? img : `/phones/${s.id}-${v}.webp` }));
+    // colour / storage come from products.js unless the admin changed the details text
+    const own = (r.d || "") === `${s.color.en} · ${s.storage}`;
+    return { ...base, k: "phone", views, color: own ? s.color : null, hex: own ? s.hex : null, storage: own ? s.storage : null, tag: s.tag || null, specs: s.specs };
+  }
+  return { ...base, k: "acc", genuine: GENUINE.includes(c) };
+};
 
-// Only recognised brands are shown on the site (client request: premium, genuine image).
-// Other rows stay in accessories.js so they can be switched back on by adding the brand here.
-export const BRANDS = ["Apple", "Samsung", "Huawei", "JBL", "Anker", "Anker Soundcore", "Belkin", "UGREEN", "Baseus", "SanDisk", "Guess", "Swiss Military",
-  "Green Lion", "Porodo", "Powerology", "WiWU", "oraimo", "Acefast", "Choetech"];
-
-const accItems = accessories.filter((a) => BRANDS.includes(a.brand)).map((a) => {
-  const f = photoFile(a);
-  return {
-    id: f,
-    k: "acc",
-    b: a.brand === "Assorted" ? "" : a.brand,
-    n: a.name,
-    d: a.details,
-    c: a.cat,
-    img: PHOTOS.has(f) ? `/products/${f}.webp` : null,
-    genuine: ["apple", "samsung", "huawei"].includes(a.cat),
-  };
-});
-
-export const items = [...phoneItems, ...accItems];
+// Hidden items (h: 1) are left out of the website entirely.
+export const items = data.products.filter((r) => !r.h && keyOf(r.c)).map(toItem);
 // hide empty categories / departments
 const used = new Set(items.map((i) => i.c));
 categories.splice(0, categories.length, ...categories.filter((c) => used.has(c.key)));
 departments.forEach((d) => { d.cats = d.cats.filter((c) => used.has(c)); });
 departments.splice(0, departments.length, ...departments.filter((d) => d.cats.length));
 export const byId = (id) => items.find((i) => i.id === id);
-export const phoneList = phoneItems;
+export const phoneList = items.filter((i) => i.k === "phone");
 export const brandCount = new Set(items.map((i) => i.b).filter(Boolean)).size;
 
 // Full display name ("Apple AirPods Pro 3", but not "Apple Apple Pencil")
 export const full = (p) => (p.b && !p.n.toLowerCase().startsWith(p.b.toLowerCase()) && p.k !== "phone" ? `${p.b} ${p.n}` : p.n);
 
 export const pick = (ids) => ids.map(byId).filter(Boolean);
+
+// ---------- prices (AED, optional) ----------
+export const hasPr = (p) => typeof p.pr === "number" && p.pr > 0;
+export const prNum = (v) => Number(v).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+export const fmtPr = (v, lang) => (lang === "ar" ? `${prNum(v)} درهم` : `AED ${prNum(v)}`);

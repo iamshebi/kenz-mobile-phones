@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { items, departments, catName, full } from "./catalog";
+import { items, departments, catName, full, hasPr, fmtPr } from "./catalog";
 import { T, path } from "./ui";
 
 const Arr = () => <svg className="ar" viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>;
@@ -43,7 +43,7 @@ export function MegaMenu({ lang, label, active }) {
               {products.map((p) => (
                 <a key={p.id} href={href(p, lang)} className="mmt">
                   <span className="mmim">{p.img ? <img src={p.img} alt="" loading="lazy" /> : <b>{p.n.slice(0, 2)}</b>}</span>
-                  <span className="mmtx"><small>{p.b || catName(p.c, lang)}</small><b>{p.n}</b><i>{p.d[lang]}</i></span>
+                  <span className="mmtx"><small>{p.b || catName(p.c, lang)}</small><b>{p.n}</b>{hasPr(p) ? <i className="mp" dir={lang === "ar" ? "rtl" : "ltr"}>{fmtPr(p.pr, lang)}</i> : <i>{p.d[lang]}</i>}</span>
                 </a>
               ))}
             </div>
@@ -106,7 +106,7 @@ export function Search({ lang }) {
               {res.map((p, i) => (
                 <li key={p.id}><a href={href(p, lang)} className={i === hi ? "on" : undefined} onMouseEnter={() => setHi(i)}>
                   <span className="mmim">{p.img ? <img src={p.img} alt="" loading="lazy" /> : <b>{p.n.slice(0, 2)}</b>}</span>
-                  <span className="mmtx"><small>{p.b || catName(p.c, lang)} · {catName(p.c, lang)}</small><b>{p.n}</b><i>{p.d[lang]}</i></span>
+                  <span className="mmtx"><small>{p.b || catName(p.c, lang)} · {catName(p.c, lang)}</small><b>{p.n}</b><i>{p.d[lang]}{hasPr(p) && <> · <span className="sp-pr" dir={lang === "ar" ? "rtl" : "ltr"}>{fmtPr(p.pr, lang)}</span></>}</i></span>
                 </a></li>
               ))}
               <li><a className="gsall" href={path(lang, `/shop?q=${encodeURIComponent(q.trim())}`)}>{t.seeAllRes(q.trim())} <Arr /></a></li>
